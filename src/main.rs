@@ -52,6 +52,6 @@ fn main() {
         }
     }
 
-    println!("Answer: {mines:?}");
+    println!("Answer: {}", numbers[mines[0]]);
     println!("Done in {} Nanos", now.elapsed().as_nanos());
 }
