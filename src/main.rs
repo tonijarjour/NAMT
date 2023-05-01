@@ -27,12 +27,14 @@ fn main() {
         let numbers = Arc::clone(&numbers);
 
         let handle = std::thread::spawn(move || {
-            let mut vec = res.lock().unwrap();
-            vec.append(&mut verify_range(
-                numbers,
+            let mut crumbles = verify_range(
+                &numbers,
                 (num_len * n / threads) + 100,
                 num_len * (n + 1) / threads,
-            ))
+            );
+
+            let mut vec = res.lock().unwrap();
+            vec.append(&mut crumbles);
         });
 
         handles.push(handle);
@@ -47,7 +49,7 @@ fn main() {
     println!("Done in {} Nanos", now.elapsed().as_nanos());
 }
 
-fn verify_range(numbers: Arc<Vec<u128>>, start: usize, end: usize) -> Vec<usize> {
+fn verify_range(numbers: &Arc<Vec<u128>>, start: usize, end: usize) -> Vec<usize> {
     let mut map: HashMap<u128, VecDeque<usize>> = HashMap::new();
 
     for (i, n) in numbers[start - 100..].iter().enumerate().take(100) {
